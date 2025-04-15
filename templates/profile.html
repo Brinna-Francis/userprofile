@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #343a40;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-bottom: 40px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4a6fdc 0%, #6354c2 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            border: none;
+        }
+
+        .card-header {
+            background-color: #f1f4f9;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            font-weight: 600;
+            padding: 15px 20px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .form-control {
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #4a6fdc;
+            box-shadow: 0 0 0 0.25rem rgba(74, 111, 220, 0.25);
+        }
+
+        .btn-primary {
+            background-color: #4a6fdc;
+            border-color: #4a6fdc;
+            padding: 10px 20px;
+        }
+
+        .btn-primary:hover {
+            background-color: #3d5cbb;
+            border-color: #3d5cbb;
+        }
+
+        .btn-success {
+            background-color: #2ecc71;
+            border-color: #2ecc71;
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+            border-color: #27ae60;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+            border-color: #c0392b;
+        }
+
+        .profile-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .profile-header {
+            background-color: #4a6fdc;
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .profile-body {
+            padding: 0;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .action-btn {
+            padding: 4px 8px;
+            font-size: 0.85rem;
+            border-radius: 4px;
+        }
+
+        .field-group {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .field-group:last-child {
+            border-bottom: none;
+        }
+
+        .field-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .field-value {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            word-break: break-word;
+            border-left: 3px solid #4a6fdc;
+        }
+
+        .collapse-toggle {
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: none;
+            border-top: 1px solid #e9ecef;
+            font-weight: 500;
+            color: #4a6fdc;
+            transition: all 0.2s;
+        }
+
+        .collapse-toggle:hover {
+            background-color: #e9ecef;
+        }
+
+        .scroll-container {
+            max-height: 800px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scroll-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .scroll-container::-webkit-scrollbar-thumb {
+            background: #c5d0e6;
+            border-radius: 10px;
+        }
+
+        .scroll-container::-webkit-scrollbar-thumb:hover {
+            background: #4a6fdc;
+        }
+
+        .empty-list-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+        }
+
+        .badge-chip {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #e9ecef;
+            border-radius: 20px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 767.98px) {
+            .col-form {
+                order: 2;
+            }
+            .col-list {
+                order: 1;
+            }
+        }
+
+        .fixed-action-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        .float-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header text-center">
+        <h1><i class="fas fa-users me-2"></i>User Profile Management</h1>
+        <p class="lead">Create, view, and manage user profiles</p>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5 col-form">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-user-plus me-2"></i>Create User Profile</span>
+                    </div>
+                    <div class="card-body">
+                        <form action="" method="POST">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username:</label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Enter username">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address:</label>
+                                <input type="text" class="form-control" id="address" name="address" placeholder="Enter address">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Location:</label>
+                                <input type="text" class="form-control" id="location" name="location" placeholder="Enter location">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email:</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="phone_number" class="form-label">Phone Number:</label>
+                                <input type="tel" class="form-control" id="phone_number" name="phone_number" placeholder="Enter phone number">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="age" class="form-label">Age:</label>
+                                <input type="number" class="form-control" id="age" name="age" placeholder="Enter age">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="qualifications" class="form-label">Qualifications:</label>
+                                <input type="text" class="form-control" id="qualifications" name="qualifications" placeholder="Enter qualifications">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="skills" class="form-label">Skills:</label>
+                                <input type="text" class="form-control" id="skills" name="skills" placeholder="Enter skills">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="certification" class="form-label">Certification:</label>
+                                <input type="text" class="form-control" id="certification" name="certification" placeholder="Enter certification">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="work_experience" class="form-label">Work Experience:</label>
+                                <textarea class="form-control" id="work_experience" name="work_experience" placeholder="Enter work experience" rows="3"></textarea>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>Submit
+                                </button>
+                                <a href="{% url 'project' %}" class="btn btn-outline-primary">
+                                    <i class="fas fa-plus me-2"></i>Add Your Project
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7 col-list">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-list me-2"></i>User Profiles</span>
+                        <button class="btn btn-sm btn-outline-primary" id="expandAll">
+                            <i class="fas fa-expand me-1"></i>Expand All
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="scroll-container">
+                            <div class="row">
+                                {% if profiles %}
+                                    {% for profile in profiles %}
+                                    <div class="col-12 mb-3">
+                                        <div class="profile-card">
+                                            <div class="profile-header d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <i class="fas fa-user-circle me-2"></i>
+                                                    <span>{{ profile.username }}</span>
+                                                </div>
+                                                <div class="profile-actions">
+                                                    <a href="{% url 'update_view' profile.id %}" class="btn btn-sm btn-light action-btn" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a href="{% url 'delete_view' profile.id %}" class="btn btn-sm btn-light action-btn" title="Delete">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="profile-body">
+                                                <!-- Essential information always visible -->
+                                                <div class="field-group">
+                                                    <div class="row">
+                                                        <div class="col-md-6 mb-3">
+                                                            <div class="field-label">Email</div>
+                                                            <div class="field-value">{{ profile.email }}</div>
+                                                        </div>
+                                                        <div class="col-md-6 mb-3">
+                                                            <div class="field-label">Location</div>
+                                                            <div class="field-value">{{ profile.location }}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6 mb-3">
+                                                            <div class="field-label">Phone</div>
+                                                            <div class="field-value">{{ profile.phone_number }}</div>
+                                                        </div>
+                                                        <div class="col-md-6 mb-3">
+                                                            <div class="field-label">Age</div>
+                                                            <div class="field-value">{{ profile.age }}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Additional information (collapsible) -->
+                                                <div class="collapse" id="profile-details-{{ forloop.counter }}">
+                                                    <div class="field-group">
+                                                        <div class="field-label">Address</div>
+                                                        <div class="field-value">{{ profile.address }}</div>
+                                                    </div>
+
+                                                    <div class="field-group">
+                                                        <div class="field-label">Skills</div>
+                                                        <div class="field-value">{{ profile.skills }}</div>
+                                                    </div>
+                                                    <div class="field-group">
+                                                        <div class="field-label">Qualifications</div>
+                                                        <div class="field-value">{{ profile.qualifications }}</div>
+                                                    </div>
+
+                                                    <div class="field-group">
+                                                        <div class="field-label">Certifications</div>
+                                                        <div class="field-value">{{ profile.certifications }}</div>
+                                                    </div>
+
+                                                    <div class="field-group">
+                                                        <div class="field-label">Work Experience</div>
+                                                        <div class="field-value">{{ profile.work_experience }}</div>
+                                                    </div>
+                                                </div>
+
+                                                <button class="collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#profile-details-{{ forloop.counter }}" aria-expanded="false">
+                                                    <span class="show-text"><i class="fas fa-chevron-down me-1"></i>Show Details</span>
+                                                    <span class="hide-text d-none"><i class="fas fa-chevron-up me-1"></i>Hide Details</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="empty-list-message">
+                                        <i class="fas fa-users fa-3x mb-3 text-muted"></i>
+                                        <h4>No profiles found</h4>
+                                        <p>Create a new profile to get started</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile floating action button -->
+    <div class="fixed-action-btn d-md-none">
+        <button class="btn btn-primary float-btn" id="scrollToForm">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        // Add a simple filter to split comma-separated values
+        // Note: In a real Django application, you would implement this in your template tags
+        function processTags() {
+            document.querySelectorAll('.field-value').forEach(element => {
+                if (element.parentElement.querySelector('.field-label').textContent.includes('Skills')) {
+                    const skills = element.textContent.split(',').filter(s => s.trim() !== '');
+                    if (skills.length > 1) {
+                        element.innerHTML = '';
+                        skills.forEach(skill => {
+                            const chip = document.createElement('span');
+                            chip.className = 'badge-chip';
+                            chip.textContent = skill.trim();
+                            element.appendChild(chip);
+                        });
+                    }
+                }
+            });
+        }
+
+        // Expand all cards
+        document.getElementById('expandAll').addEventListener('click', function() {
+            const collapseButtons = document.querySelectorAll('.collapse-toggle');
+            const allCollapsed = Array.from(collapseButtons).some(btn =>
+                !document.querySelector(btn.getAttribute('data-bs-target')).classList.contains('show')
+            );
+
+            collapseButtons.forEach(btn => {
+                const target = document.querySelector(btn.getAttribute('data-bs-target'));
+                const showText = btn.querySelector('.show-text');
+                const hideText = btn.querySelector('.hide-text');
+
+                if (allCollapsed) {
+                    if (!target.classList.contains('show')) {
+                        new bootstrap.Collapse(target).show();
+                        showText.classList.add('d-none');
+                        hideText.classList.remove('d-none');
+                    }
+                } else {
+                    if (target.classList.contains('show')) {
+                        new bootstrap.Collapse(target).hide();
+                        showText.classList.remove('d-none');
+                        hideText.classList.add('d-none');
+                    }
+                }
+            });
+
+            // Update button text based on state
+            this.innerHTML = allCollapsed ?
+                '<i class="fas fa-compress me-1"></i>Collapse All' :
+                '<i class="fas fa-expand me-1"></i>Expand All';
+        });
+
+        // Handle collapse toggle button text
+        document.querySelectorAll('.collapse-toggle').forEach(button => {
+            button.addEventListener('click', function() {
+                const showText = this.querySelector('.show-text');
+                const hideText = this.querySelector('.hide-text');
+
+                setTimeout(() => {
+                    const target = document.querySelector(this.getAttribute('data-bs-target'));
+                    if (target.classList.contains('show')) {
+                        showText.classList.add('d-none');
+                        hideText.classList.remove('d-none');
+                    } else {
+                        showText.classList.remove('d-none');
+                        hideText.classList.add('d-none');
+                    }
+                }, 350);
+            });
+        });
+
+        // Mobile scroll to form button
+        document.getElementById('scrollToForm').addEventListener('click', function() {
+            document.querySelector('.col-form').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+
+        // Process skills tags on page load
+        window.addEventListener('DOMContentLoaded', processTags);
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>Delete the profile of {{profile.username}}</h1>
+<form action="" method="POST">
+  {% csrf_token %}
+    {{ forms.as_p }}
+  <h2>Are you sure ?</h2>
+  <input type="submit" value="Confirm delete">
+</form>
+
+</body>
+</html>
